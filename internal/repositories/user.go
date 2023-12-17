@@ -25,11 +25,11 @@ func (ur *UserRepository) GetTableName() string {
 
 // GetUser retrieves a user from the database by ID.
 func (ur *UserRepository) GetUserByID(userID int) (*models.User, error) {
-	query := "SELECT user_id, name FROM users WHERE user_id = $1 "
+	query := "SELECT user_id, name, role FROM users WHERE user_id = $1 "
 	row := ur.db.QueryRow(query, userID)
 
 	user := &models.User{}
-	err := row.Scan(&user.UserID, &user.Name)
+	err := row.Scan(&user.UserID, &user.Name, &user.Role)
 	if err != nil {
 		return nil, err
 	}

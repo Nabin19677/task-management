@@ -31,3 +31,11 @@ func (s *TaskService) GetTasksByManager(managerId int) ([]*models.Task, error) {
 	}
 	return tasks, nil
 }
+
+func (s *TaskService) GetTasksByAssignee(assigneeId int) ([]*models.Task, error) {
+	tasks, err := s.TaskRepo.GetTasksByAssignee(assigneeId)
+	if err != nil {
+		return nil, err
+	}
+	return tasks, nil
+}

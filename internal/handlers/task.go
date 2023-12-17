@@ -71,7 +71,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 					"Tasks": tasks,
 				},
 			}
-			utils.RenderTemplate(w, "dashboard.html", pageVariables)
+			utils.RenderTemplate(w, "manager_dashboard.html", pageVariables)
 		} else {
 			return
 		}

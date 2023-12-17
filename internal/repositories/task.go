@@ -49,7 +49,7 @@ func (ur *TaskRepository) Insert(newTask models.NewTask) (bool, error) {
 func (ur *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, error) {
 	var tasks []*models.Task
 
-	query := "SELECT id, title, description FROM " + ur.GetTableName() + " WHERE manager_id = $1 ;"
+	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE manager_id = $1 ;"
 	rows, err := ur.db.Query(query, managerId)
 
 	if err != nil {
@@ -61,7 +61,34 @@ func (ur *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, erro
 
 	for rows.Next() {
 		var task models.Task
-		err := rows.Scan(&task.ID, &task.Title, &task.Description)
+		err := rows.Scan(&task.ID, &task.Title, &task.Description, &task.Status)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		tasks = append(tasks, &task)
+	}
+
+	return tasks, nil
+}
+
+func (ur *TaskRepository) GetTasksByAssignee(assigneeId int) ([]*models.Task, error) {
+	var tasks []*models.Task
+
+	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE assignee_id = $1 ;"
+	rows, err := ur.db.Query(query, assigneeId)
+
+	if err != nil {
+		log.Fatal(err)
+
+	}
+
+	defer rows.Close()
+
+	for rows.Next() {
+		var task models.Task
+		err := rows.Scan(&task.ID, &task.Title, &task.Description, &task.Status)
 
 		if err != nil {
 			log.Fatal(err)

@@ -7,14 +7,13 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
   </head>
   <body>
-    <a href="/create-task" class="signup-button"> Create Task </a>
     <table>
       <thead>
         <tr>
           <th>ID</th>
           <th>Title</th>
           <th>Description</th>
-          <!-- Add more table headers as needed -->
+          <th>Status</th>
         </tr>
       </thead>
       <tbody>
@@ -23,7 +22,7 @@
           <td>{{.ID}}</td>
           <td>{{.Title}}</td>
           <td>{{.Description}}</td>
-          <!-- Add more table data as needed -->
+          <td>{{.Status}}</td>
         </tr>
         {{end}}
       </tbody>
