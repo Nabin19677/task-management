@@ -20,7 +20,10 @@ var HTMLTemplates *template.Template
 
 // Initialize HTML templates
 func initTemplates() {
-	// Implementation
+	http.HandleFunc("/", handlers.HomeHandler)
+	http.HandleFunc("/login", handlers.LoginHandler)
+	http.HandleFunc("/signup", handlers.SignupHandler)
+	http.HandleFunc("/dashboard", handlers.DashboardHandler)
 }
 
 // StartCronJob starts a cron job for sending daily email reminders
@@ -45,7 +48,7 @@ func main() {
 	utils.RegisterRoute("tasks", handlers.GetTaskHandler)
 
 	// Serve static files (CSS, JS, etc.)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("internal/static"))))
 
 	// Start the cron job
 	StartCronJob()
