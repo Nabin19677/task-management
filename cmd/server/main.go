@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
@@ -14,10 +13,8 @@ import (
 	"anilkhadka.com.np/task-management/utils"
 
 	_ "github.com/lib/pq"
+	"github.com/robfig/cron/v3"
 )
-
-// HTMLTemplates contains the parsed HTML templates
-var HTMLTemplates *template.Template
 
 // Initialize HTML templates
 func initTemplates() {
@@ -28,9 +25,16 @@ func initTemplates() {
 	http.Handle("/dashboard", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DashboardHandler)))
 }
 
-// StartCronJob starts a cron job for sending daily email reminders
-func StartCronJob() {
-	// Implementation
+func StartCronJobs() {
+	c := cron.New()
+
+	_, err := c.AddFunc("0 9 * * *", handlers.SendDailyMail)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.Start()
 }
 
 func main() {
@@ -45,7 +49,7 @@ func main() {
 	// Initialize HTML templates
 	initTemplates()
 
-	// Define HTTP routes handlers
+	// Define HTTP API routes handlers
 	utils.RegisterRoute("users", handlers.GetUserHandler)
 	utils.RegisterRoute("tasks", handlers.GetTaskHandler)
 
@@ -53,7 +57,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("internal/static"))))
 
 	// Start the cron job
-	StartCronJob()
+	StartCronJobs()
 
 	// Start the server
 	port := ":8080"

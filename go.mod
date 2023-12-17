@@ -6,6 +6,7 @@ require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/lib/pq v1.10.9
+	github.com/robfig/cron/v3 v3.0.1
 	github.com/spf13/viper v1.17.0
 	golang.org/x/crypto v0.16.0
 )
