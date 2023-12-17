@@ -16,12 +16,24 @@ func NewTaskService() *TaskService {
 	}
 }
 
+func (s *TaskService) GetByID(taskId int) (*models.Task, error) {
+	return s.TaskRepo.GetTask(taskId)
+}
+
 func (s *TaskService) CreateTask(newTask *models.NewTask) (bool, error) {
 	_, err := s.TaskRepo.Insert(*newTask)
 	if err != nil {
 		return false, err
 	}
 	return true, nil
+}
+
+func (s *TaskService) UpdateTask(task *models.Task) error {
+	_, err := s.TaskRepo.Update(*task)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func (s *TaskService) GetTasksByManager(managerId int) ([]*models.Task, error) {

@@ -1,40 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{.Title}}</title>
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
-  </head>
-  <body>
+</head>
+<body>
     <h2>Edit Task</h2>
 
-    <form action="/edit-task" method="post">
-      <label for="title">Title:</label>
-      <input type="text" id="title" name="title" required />
+    <form action="/edit-task/{{.Data.Task.ID}}" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="{{.Data.Task.Title}}" required />
 
-      <label for="description">Description:</label>
-      <textarea id="description" name="description" rows="4"></textarea>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" rows="4">{{.Data.Task.Description}}</textarea>
 
-      <label for="dueDate">Due Date:</label>
-      <input type="datetime-local" id="dueDate" name="dueDate" />
+        <label for="dueDate">Due Date:</label>
+        <input type="datetime-local" id="dueDate" name="dueDate" value="{{.Data.Task.DueDate}}" />
 
-      <label for="status">Status:</label>
-      <select id="status" name="status">
-        <option value="TODO">TODO</option>
-        <option value="IN PROGRESS">In Progress</option>
-        <option value="IN REVIEW">In Review</option>
-        <option value="DONE">Done</option>
-      </select>
+        <label for="status">Status:</label>
+        <select id="status" name="status">
+            <option value="TODO"{{if eq .Data.Task.Status "TODO"}} selected{{end}}>TODO</option>
+            <option value="IN_PROGRESS"{{if eq .Data.Task.Status "IN_PROGRESS"}} selected{{end}}>IN PROGRESS</option>
+            <option value="IN_REVIEW"{{if eq .Data.Task.Status "IN_REVIEW"}} selected{{end}}>IN REVIEW</option>
+            <option value="DONE"{{if eq .Data.Task.Status "DONE"}} selected{{end}}>DONE</option>
+        </select>
 
-      <label for="assignee">Assignee:</label>
-      <select id="assignee" name="assignee">
-        {{range .Data.Assignees}}
-        <option value="{{.UserID}}">{{.Name}}</option>
-        {{end}}
-      </select>
-
-      <button type="submit">Create Task</button>
+        <button type="submit">Update Task</button>
     </form>
-  </body>
+</body>
 </html>

@@ -21,11 +21,11 @@ func (tr *TaskRepository) GetTableName() string {
 }
 
 func (tr *TaskRepository) GetTask(taskID int) (*models.Task, error) {
-	query := "SELECT id, name FROM users WHERE id = ?"
+	query := "SELECT id, title, description, status FROM " + tr.GetTableName() + " WHERE id = $1 ;"
 	row := tr.db.QueryRow(query, taskID)
 
 	task := &models.Task{}
-	err := row.Scan(&task.Title)
+	err := row.Scan(&task.ID, &task.Title, &task.Description, &task.Status)
 	if err != nil {
 		return nil, err
 	}
@@ -44,6 +44,18 @@ func (tr *TaskRepository) Insert(newTask models.NewTask) (bool, error) {
 
 	return true, nil
 
+}
+
+func (tr *TaskRepository) Update(updatedTask models.Task) (bool, error) {
+	query := "UPDATE " + tr.GetTableName() + " SET title = $1, description = $2, due_date = $3, status = $4 WHERE id = $5"
+	_, err := tr.db.Exec(query, updatedTask.Title, updatedTask.Description, updatedTask.DueDate, updatedTask.Status, updatedTask.ID)
+
+	if err != nil {
+		log.Println("update failed:", err)
+		return false, err
+	}
+
+	return true, nil
 }
 
 func (tr *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, error) {

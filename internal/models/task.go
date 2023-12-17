@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"anilkhadka.com.np/task-management/internal/types"
 )
 
@@ -10,7 +8,7 @@ type Task struct {
 	ID          int
 	Title       string
 	Description string
-	DueDate     time.Time
+	DueDate     string
 	Status      types.TaskStatus
 	AssigneeID  int
 	ManagerID   int

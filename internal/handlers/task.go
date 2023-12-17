@@ -111,3 +111,71 @@ func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func EditTaskHandler(w http.ResponseWriter, r *http.Request) {
+	// Extract task ID from the URL
+	taskID, err := strconv.Atoi(r.URL.Path[len("/edit-task/"):])
+	if err != nil {
+		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		return
+	}
+	taskService := services.NewTaskService()
+	if r.Method == http.MethodPost {
+		err = r.ParseForm()
+		if err != nil {
+			http.Error(w, "Error parsing form data", http.StatusInternalServerError)
+			return
+		}
+
+		// Get the form values
+		title := r.FormValue("title")
+		description := r.FormValue("description")
+		dueDate := r.FormValue("dueDate")
+		status := r.FormValue("status")
+
+		// Create a new task object with the updated values
+		updatedTask := &models.Task{
+			ID:          taskID,
+			Title:       title,
+			Description: description,
+			DueDate:     dueDate,
+			Status:      types.TaskStatus(status),
+
+			// Set other fields accordingly
+		}
+
+		err = taskService.UpdateTask(updatedTask)
+		if err != nil {
+			http.Error(w, "Failed to update task", http.StatusInternalServerError)
+			return
+		}
+
+		// Redirect the user to the dashboard or task list page after successful update
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	} else if r.Method == http.MethodGet {
+		// Fetch the task details from the database based on the task ID
+		task, err := taskService.GetByID(taskID)
+
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Failed to fetch task details", http.StatusInternalServerError)
+			return
+		}
+
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Failed to fetch assignees", http.StatusInternalServerError)
+			return
+		}
+
+		// Render the edit task page with the task details and additional data
+		pageVariables := types.PageVariables{
+			Title: "Edit Task",
+			Data: map[string]interface{}{
+				"Task": task,
+			},
+		}
+		utils.RenderTemplate(w, "edit_task.html", pageVariables)
+	}
+
+}
