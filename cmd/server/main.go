@@ -21,7 +21,7 @@ func initTemplates() {
 	http.HandleFunc("/", handlers.HomeHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/signup", handlers.SignupHandler)
-	http.HandleFunc("/create-task", handlers.CreateTaskHandler)
+	http.Handle("/create-task", middlewares.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler)))
 	http.Handle("/dashboard", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DashboardHandler)))
 }
 

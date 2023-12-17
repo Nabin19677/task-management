@@ -1,12 +1,15 @@
 package utils
 
 import (
+	"errors"
 	"html/template"
 	"net/http"
 	"path/filepath"
 	"regexp"
 
+	"anilkhadka.com.np/task-management/conf"
 	"anilkhadka.com.np/task-management/internal/types"
+	"github.com/dgrijalva/jwt-go"
 )
 
 func RegisterRoute(route string, handler http.HandlerFunc) {
@@ -45,4 +48,22 @@ func ExtractParamsFromURL(path, prefix string) []string {
 		return matches[1:]
 	}
 	return nil
+}
+
+func ParseJWTToken(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+
+		secret := []byte(conf.EnvConfigs.JwtSecret)
+		return secret, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, errors.New("invalid token")
 }

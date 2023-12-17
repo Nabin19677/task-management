@@ -17,6 +17,11 @@ func GetTaskHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
+	userID, ok := r.Context().Value("user_id").(string)
+	if !ok {
+		http.Error(w, "User ID not found in context", http.StatusInternalServerError)
+		return
+	}
 	taskService := services.NewTaskService()
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
@@ -30,7 +35,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		dueDate := r.FormValue("dueDate")
 		status := r.FormValue("status")
 
-		managerId, err := strconv.Atoi(r.FormValue("manager"))
+		managerId, err := strconv.Atoi(userID)
 		if err != nil {
 			return
 		}

@@ -1,7 +1,10 @@
 package middlewares
 
 import (
+	"context"
 	"net/http"
+
+	"anilkhadka.com.np/task-management/utils"
 )
 
 func AuthMiddleware(next http.Handler) http.Handler {
@@ -14,10 +17,23 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		// TODO: Validate the authentication token
-		// You need to implement token validation (e.g., verify signature, check expiration) here.
+		claims, err := utils.ParseJWTToken(authTokenCookie.Value)
+		if err != nil {
+			return
+		}
 
-		// If the token is valid, proceed to the next handler
+		// Access user_id (jti) from the token claims
+		userID, ok := claims["jti"].(string)
+		if !ok {
+			return
+		}
+
+		// Add user_id to the request context
+		ctx := context.WithValue(r.Context(), "user_id", userID)
+		r = r.WithContext(ctx)
+
+		// Call the next handler in the chain
 		next.ServeHTTP(w, r)
+
 	})
 }
