@@ -1,53 +1,33 @@
 package services
 
 import (
-	"database/sql"
-
 	"anilkhadka.com.np/task-management/internal/models"
+	"anilkhadka.com.np/task-management/internal/repositories"
 )
 
-type TaskService interface {
-	CreateTask(task *models.Task) error
-	UpdateTask(task *models.Task) error
-	DeleteTask(taskID int) error
-	AssignTask(taskID int, assignee string) error
-	MarkTaskAsDone(taskID int) error
-	GetAllTasks() ([]*models.Task, error)
+type TaskService struct {
+	TaskRepo *repositories.TaskRepository
 }
 
-// Service implements TaskService interface
-type Service struct {
-	DB *sql.DB
+func NewTaskService() *TaskService {
+	repository := repositories.GetRepository()
+	return &TaskService{
+		TaskRepo: repository.Task,
+	}
 }
 
-// Implement TaskService methods for Service
-
-func (m *Service) CreateTask(task *models.Task) error {
-	// Implementation
-	return nil
+func (s *TaskService) CreateTask(newTask *models.NewTask) (bool, error) {
+	_, err := s.TaskRepo.Insert(*newTask)
+	if err != nil {
+		return false, err
+	}
+	return true, nil
 }
 
-func (m *Service) UpdateTask(task *models.Task) error {
-	// Implementation
-	return nil
-}
-
-func (m *Service) DeleteTask(taskID int) error {
-	// Implementation
-	return nil
-}
-
-func (m *Service) AssignTask(taskID int, assignee string) error {
-	// Implementation
-	return nil
-}
-
-func (m *Service) MarkTaskAsDone(taskID int) error {
-	// Implementation
-	return nil
-}
-
-func (m *Service) GetAllTasks() ([]*models.Task, error) {
-	// Implementation
-	return nil, nil
+func (s *TaskService) GetTasksByManager(managerId int) ([]*models.Task, error) {
+	tasks, err := s.TaskRepo.GetTasksByManager(managerId)
+	if err != nil {
+		return nil, err
+	}
+	return tasks, nil
 }

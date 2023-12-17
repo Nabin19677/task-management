@@ -19,6 +19,7 @@ func InitRepositories(db *sql.DB) *Repository {
 	once.Do(func() {
 		r = &Repository{
 			User: NewUserRepository(db),
+			Task: NewTaskRepository(db),
 		}
 	})
 	return r
