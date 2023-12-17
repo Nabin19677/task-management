@@ -7,9 +7,9 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
   </head>
   <body>
-    <h2>Create Task</h2>
+    <h2>Edit Task</h2>
 
-    <form action="/create-task" method="post">
+    <form action="/edit-task" method="post">
       <label for="title">Title:</label>
       <input type="text" id="title" name="title" required />
 
@@ -18,6 +18,14 @@
 
       <label for="dueDate">Due Date:</label>
       <input type="datetime-local" id="dueDate" name="dueDate" />
+
+      <label for="status">Status:</label>
+      <select id="status" name="status">
+        <option value="TODO">TODO</option>
+        <option value="IN PROGRESS">In Progress</option>
+        <option value="IN REVIEW">In Review</option>
+        <option value="DONE">Done</option>
+      </select>
 
       <label for="assignee">Assignee:</label>
       <select id="assignee" name="assignee">

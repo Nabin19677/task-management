@@ -34,7 +34,6 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		title := r.FormValue("title")
 		description := r.FormValue("description")
 		dueDate := r.FormValue("dueDate")
-		status := r.FormValue("status")
 
 		managerId, err := strconv.Atoi(userID)
 		if err != nil {
@@ -50,7 +49,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 			Title:       title,
 			Description: description,
 			DueDate:     dueDate,
-			Status:      status,
+			Status:      types.StatusTodo,
 			ManagerID:   managerId,
 			AssigneeID:  assigneeId,
 		}
