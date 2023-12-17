@@ -90,3 +90,24 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		utils.RenderTemplate(w, "create_task.html", pageVariables)
 	}
 }
+
+func DeleteTaskHandler(w http.ResponseWriter, r *http.Request) {
+	taskID, err := strconv.Atoi(r.URL.Path[len("/delete-task/"):])
+	if err != nil {
+		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		return
+	}
+
+	taskService := services.NewTaskService()
+
+	err = taskService.DeleteTask(taskID)
+
+	if err != nil {
+		log.Fatal(err)
+		return
+
+	} else {
+		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+	}
+
+}

@@ -15,6 +15,7 @@
           <th>Title</th>
           <th>Description</th>
           <th>Status</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -24,6 +25,10 @@
           <td>{{.Title}}</td>
           <td>{{.Description}}</td>
           <td>{{.Status}}</td>
+          <td>
+            <a href="/edit-task/{{.ID}}">Edit</a>
+            <a href="/delete-task/{{.ID}}">Delete</a>
+          </td>
         </tr>
         {{end}}
       </tbody>

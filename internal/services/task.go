@@ -39,3 +39,8 @@ func (s *TaskService) GetTasksByAssignee(assigneeId int) ([]*models.Task, error)
 	}
 	return tasks, nil
 }
+
+func (s *TaskService) DeleteTask(taskId int) error {
+	err := s.TaskRepo.Delete(taskId)
+	return err
+}

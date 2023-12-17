@@ -16,13 +16,13 @@ func NewTaskRepository(db *sql.DB) *TaskRepository {
 	return &TaskRepository{db: db}
 }
 
-func (ur *TaskRepository) GetTableName() string {
+func (tr *TaskRepository) GetTableName() string {
 	return "tasks"
 }
 
-func (ur *TaskRepository) GetTask(taskID int) (*models.Task, error) {
+func (tr *TaskRepository) GetTask(taskID int) (*models.Task, error) {
 	query := "SELECT id, name FROM users WHERE id = ?"
-	row := ur.db.QueryRow(query, taskID)
+	row := tr.db.QueryRow(query, taskID)
 
 	task := &models.Task{}
 	err := row.Scan(&task.Title)
@@ -33,9 +33,9 @@ func (ur *TaskRepository) GetTask(taskID int) (*models.Task, error) {
 	return task, nil
 }
 
-func (ur *TaskRepository) Insert(newTask models.NewTask) (bool, error) {
-	query := "INSERT INTO " + ur.GetTableName() + " (title, description, due_date, status, manager_id, assignee_id) VALUES ($1, $2, $3, $4, $5, $6)"
-	_, err := ur.db.Exec(query, newTask.Title, newTask.Description, newTask.DueDate, newTask.Status, newTask.ManagerID, newTask.AssigneeID)
+func (tr *TaskRepository) Insert(newTask models.NewTask) (bool, error) {
+	query := "INSERT INTO " + tr.GetTableName() + " (title, description, due_date, status, manager_id, assignee_id) VALUES ($1, $2, $3, $4, $5, $6)"
+	_, err := tr.db.Exec(query, newTask.Title, newTask.Description, newTask.DueDate, newTask.Status, newTask.ManagerID, newTask.AssigneeID)
 
 	if err != nil {
 		log.Println("insert failed:", err)
@@ -46,11 +46,11 @@ func (ur *TaskRepository) Insert(newTask models.NewTask) (bool, error) {
 
 }
 
-func (ur *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, error) {
+func (tr *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, error) {
 	var tasks []*models.Task
 
-	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE manager_id = $1 ;"
-	rows, err := ur.db.Query(query, managerId)
+	query := "SELECT id, title, description, status FROM " + tr.GetTableName() + " WHERE manager_id = $1 ;"
+	rows, err := tr.db.Query(query, managerId)
 
 	if err != nil {
 		log.Fatal(err)
@@ -98,4 +98,14 @@ func (ur *TaskRepository) GetTasksByAssignee(assigneeId int) ([]*models.Task, er
 	}
 
 	return tasks, nil
+}
+
+func (tr *TaskRepository) Delete(taskID int) error {
+	query := "DELETE FROM " + tr.GetTableName() + " WHERE id = $1"
+	_, err := tr.db.Exec(query, taskID)
+	if err != nil {
+		log.Println("delete failed:", err)
+		return err
+	}
+	return nil
 }
