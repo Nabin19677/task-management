@@ -132,3 +132,51 @@ func (tr *TaskRepository) Delete(taskID int) error {
 	}
 	return nil
 }
+
+func (tr *TaskRepository) AssigneeWithUndoneTasks() ([]models.AssigneeWithTask, error) {
+	query := `
+		SELECT
+			u.user_id AS assignee_id,
+			u.name AS assignee_name,
+			u.email AS assignee_email,
+			t.id AS task_id,
+			t.title AS task_title,
+			t.description AS task_description,
+			t.due_date AS task_due_date,
+			t.status AS task_status
+		FROM
+			users u
+		JOIN
+			tasks t ON u.user_id = t.assignee_id
+		WHERE
+			t.status != 'DONE';
+	`
+
+	rows, err := tr.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var assigneesWithTasks []models.AssigneeWithTask
+
+	for rows.Next() {
+		var assigneeWithTask models.AssigneeWithTask
+		err := rows.Scan(
+			&assigneeWithTask.AssigneeID,
+			&assigneeWithTask.AssigneeName,
+			&assigneeWithTask.AssigneeEmail,
+			&assigneeWithTask.TaskID,
+			&assigneeWithTask.TaskTitle,
+			&assigneeWithTask.TaskDescription,
+			&assigneeWithTask.TaskDueDate,
+			&assigneeWithTask.TaskStatus,
+		)
+		if err != nil {
+			return nil, err
+		}
+		assigneesWithTasks = append(assigneesWithTasks, assigneeWithTask)
+	}
+
+	return assigneesWithTasks, nil
+}

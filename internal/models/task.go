@@ -22,3 +22,14 @@ type NewTask struct {
 	AssigneeID  int              `json:"assigneeId" db:"assignee_id"`
 	ManagerID   int              `json:"managerId" db:"manager_id"`
 }
+
+type AssigneeWithTask struct {
+	AssigneeID      int
+	AssigneeName    string
+	AssigneeEmail   string
+	TaskID          int
+	TaskTitle       string
+	TaskDescription string
+	TaskDueDate     string
+	TaskStatus      string
+}

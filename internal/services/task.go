@@ -64,3 +64,7 @@ func (s *TaskService) DeleteTask(taskId int) error {
 	err := s.TaskRepo.Delete(taskId)
 	return err
 }
+
+func (s *TaskService) AssigneeWithUndoneTasks() ([]models.AssigneeWithTask, error) {
+	return s.TaskRepo.AssigneeWithUndoneTasks()
+}
