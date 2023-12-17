@@ -24,6 +24,7 @@ func initTemplates() {
 	http.Handle("/create-task", middlewares.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler)))
 	http.Handle("/delete-task/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler)))
 	http.Handle("/edit-task/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.EditTaskHandler)))
+	http.Handle("/update-status/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.UpdateTaskStatusHandler)))
 	http.Handle("/dashboard", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DashboardHandler)))
 }
 

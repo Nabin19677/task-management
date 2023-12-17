@@ -179,3 +179,32 @@ func EditTaskHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
+func UpdateTaskStatusHandler(w http.ResponseWriter, r *http.Request) {
+	// Extract task ID from the URL
+	taskID, err := strconv.Atoi(r.URL.Path[len("/update-status/"):])
+	if err != nil {
+		http.Error(w, "Invalid task ID", http.StatusBadRequest)
+		return
+	}
+
+	// Parse the form values
+	err = r.ParseForm()
+	if err != nil {
+		http.Error(w, "Error parsing form data", http.StatusInternalServerError)
+		return
+	}
+
+	// Get the new status from the form
+	newStatus := r.FormValue("status")
+
+	// Update the task status in the repository
+	taskService := services.NewTaskService()
+	err = taskService.UpdateTaskStatus(taskID, newStatus)
+	if err != nil {
+		http.Error(w, "Failed to update task status", http.StatusInternalServerError)
+		return
+	}
+
+	http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+}

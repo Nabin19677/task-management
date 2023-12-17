@@ -58,6 +58,17 @@ func (tr *TaskRepository) Update(updatedTask models.Task) (bool, error) {
 	return true, nil
 }
 
+func (tr *TaskRepository) UpdateTaskStatus(taskID int, newStatus string) (bool, error) {
+	query := "UPDATE " + tr.GetTableName() + " SET status = $1 WHERE id = $2"
+	_, err := tr.db.Exec(query, newStatus, taskID)
+	if err != nil {
+		log.Println("update failed:", err)
+		return false, err
+	}
+
+	return true, nil
+}
+
 func (tr *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, error) {
 	var tasks []*models.Task
 

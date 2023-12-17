@@ -22,7 +22,15 @@
           <td>{{.ID}}</td>
           <td>{{.Title}}</td>
           <td>{{.Description}}</td>
-          <td>{{.Status}}</td>
+          <td>
+            <form action="/update-status/{{.ID}}" method="post">
+              <select name="status" onchange="this.form.submit()">
+                <option value="TODO"{{if eq .Status "TODO"}} selected{{end}}>TODO</option>
+                <option value="IN_PROGRESS"{{if eq .Status "IN_PROGRESS"}} selected{{end}}>IN PROGRESS</option>
+                <option value="IN_REVIEW"{{if eq .Status "IN_REVIEW"}} selected{{end}}>IN REVIEW</option>
+              </select>
+            </form>
+          </td>
         </tr>
         {{end}}
       </tbody>

@@ -36,6 +36,14 @@ func (s *TaskService) UpdateTask(task *models.Task) error {
 	return nil
 }
 
+func (s *TaskService) UpdateTaskStatus(taskID int, newStatus string) error {
+	_, err := s.TaskRepo.UpdateTaskStatus(taskID, newStatus)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *TaskService) GetTasksByManager(managerId int) ([]*models.Task, error) {
 	tasks, err := s.TaskRepo.GetTasksByManager(managerId)
 	if err != nil {
