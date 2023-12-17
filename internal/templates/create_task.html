@@ -27,7 +27,11 @@
       </select>
 
       <label for="assignee">Assignee:</label>
-      <input type="text" id="assignee" name="assignee" />
+      <select id="assignee" name="assignee">
+        {{range .Data.Assignees}}
+        <option value="{{.UserID}}">{{.Name}}</option>
+        {{end}}
+      </select>
 
       <button type="submit">Create Task</button>
     </form>

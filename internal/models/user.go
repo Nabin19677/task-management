@@ -27,6 +27,14 @@ type NewUser struct {
 	Role        types.Role `json:"role" db:"role"`
 }
 
+type PublicUser struct {
+	UserID      int        `json:"userId" db:"user_id"`
+	Name        string     `json:"name" db:"name"`
+	Email       *string    `json:"email" db:"email" `
+	PhoneNumber *string    `json:"phoneNumber" db:"phone_number"`
+	Role        types.Role `json:"role" db:"role"`
+}
+
 func (u *NewUser) HashPassword(password string) error {
 	passwordHash, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 

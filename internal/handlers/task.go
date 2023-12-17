@@ -23,6 +23,7 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	taskService := services.NewTaskService()
+	userService := services.NewUserService()
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
 		if err != nil {
@@ -76,9 +77,16 @@ func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 	} else if r.Method == http.MethodGet {
+		assignees, err := userService.FindUsersByRole(types.Assignee)
+
+		if err != nil {
+			log.Println(err)
+		}
 		pageVariables := types.PageVariables{
 			Title: "Create Task",
-			Data:  nil,
+			Data: map[string]interface{}{
+				"Assignees": assignees,
+			},
 		}
 		utils.RenderTemplate(w, "create_task.html", pageVariables)
 	}

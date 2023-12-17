@@ -5,6 +5,7 @@ import (
 
 	"anilkhadka.com.np/task-management/internal/models"
 	"anilkhadka.com.np/task-management/internal/repositories"
+	"anilkhadka.com.np/task-management/internal/types"
 )
 
 type UserService struct {
@@ -34,6 +35,14 @@ func (s *UserService) CreateUser(newUser *models.NewUser) (bool, error) {
 		return false, err
 	}
 	return true, nil
+}
+
+func (s *UserService) FindUsersByRole(role types.Role) ([]*models.PublicUser, error) {
+	users, err := s.UserRepo.FindByRole(role)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
 }
 
 func (s *UserService) LoginUser(loginInput *models.LoginInput) (*models.AuthResponse, error) {

@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"anilkhadka.com.np/task-management/internal/models"
+	"anilkhadka.com.np/task-management/internal/types"
 )
 
 // UserRepository handles user-related operations.
@@ -77,4 +78,66 @@ func (ur *UserRepository) Insert(newUser models.NewUser) (bool, error) {
 
 	return true, nil
 
+}
+
+func (ur *UserRepository) Find() ([]*models.PublicUser, error) {
+	var users []*models.PublicUser
+
+	query := "SELECT user_id, name, email, phone_number, role FROM " + ur.GetTableName()
+
+	rows, err := ur.db.Query(query)
+	if err != nil {
+		log.Println("find failed:", err)
+		return users, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var user models.PublicUser
+		err := rows.Scan(&user.UserID, &user.Name, &user.Email, &user.PhoneNumber, &user.Role)
+		if err != nil {
+			log.Println("scan failed:", err)
+			return users, err
+		}
+
+		users = append(users, &user)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Println("rows error:", err)
+		return users, err
+	}
+
+	return users, nil
+}
+
+func (ur *UserRepository) FindByRole(role types.Role) ([]*models.PublicUser, error) {
+	var users []*models.PublicUser
+
+	query := "SELECT user_id, name, email, phone_number, role FROM " + ur.GetTableName() + " WHERE role = $1 ;"
+
+	rows, err := ur.db.Query(query, role)
+	if err != nil {
+		log.Println("find failed:", err)
+		return users, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var user models.PublicUser
+		err := rows.Scan(&user.UserID, &user.Name, &user.Email, &user.PhoneNumber, &user.Role)
+		if err != nil {
+			log.Println("scan failed:", err)
+			return users, err
+		}
+
+		users = append(users, &user)
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Println("rows error:", err)
+		return users, err
+	}
+
+	return users, nil
 }
