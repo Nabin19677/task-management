@@ -1,7 +1,12 @@
 package models
 
 import (
+	"strconv"
+	"time"
+
+	"anilkhadka.com.np/task-management/conf"
 	"anilkhadka.com.np/task-management/internal/types"
+	"github.com/dgrijalva/jwt-go"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -32,4 +37,33 @@ func (u *NewUser) HashPassword(password string) error {
 	u.Password = string(passwordHash)
 
 	return err
+}
+
+func (u *User) GenToken() (*AuthToken, error) {
+	expireAt := time.Now().Add(time.Hour * 24 * 7)
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		ExpiresAt: expireAt.Unix(),
+		Id:        strconv.Itoa(u.UserID),
+		IssuedAt:  time.Now().Unix(),
+		Issuer:    conf.EnvConfigs.JwtIssuer,
+	})
+
+	accessToken, err := token.SignedString([]byte(conf.EnvConfigs.JwtSecret))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &AuthToken{
+		AccessToken: accessToken,
+		ExpireAt:    expireAt.UTC().String(),
+	}, nil
+}
+
+func (u *User) ComparePassword(password string) error {
+	bytePassword := []byte(password)
+	byteHashedPassword := []byte(u.Password)
+
+	return bcrypt.CompareHashAndPassword(byteHashedPassword, bytePassword)
 }

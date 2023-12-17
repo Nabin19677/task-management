@@ -3,6 +3,7 @@ module anilkhadka.com.np/task-management
 go 1.21.5
 
 require (
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/golang-migrate/migrate/v4 v4.16.2
 	github.com/lib/pq v1.10.9
 	github.com/spf13/viper v1.17.0

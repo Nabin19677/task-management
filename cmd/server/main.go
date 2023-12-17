@@ -9,6 +9,7 @@ import (
 	"anilkhadka.com.np/task-management/conf"
 	"anilkhadka.com.np/task-management/database/postgres"
 	"anilkhadka.com.np/task-management/internal/handlers"
+	"anilkhadka.com.np/task-management/internal/middlewares"
 	"anilkhadka.com.np/task-management/internal/repositories"
 	"anilkhadka.com.np/task-management/utils"
 
@@ -23,7 +24,7 @@ func initTemplates() {
 	http.HandleFunc("/", handlers.HomeHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
 	http.HandleFunc("/signup", handlers.SignupHandler)
-	http.HandleFunc("/dashboard", handlers.DashboardHandler)
+	http.Handle("/dashboard", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DashboardHandler)))
 }
 
 // StartCronJob starts a cron job for sending daily email reminders

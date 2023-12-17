@@ -52,10 +52,9 @@ func (ur *UserRepository) FindByID(userID int) (*models.User, error) {
 
 func (ur *UserRepository) FindByEmail(email string) (*models.User, error) {
 	var user models.User
-
 	query := "SELECT * FROM " + ur.GetTableName() + " WHERE email = $1"
 	err := ur.db.QueryRow(query, email).
-		Scan(&user.UserID, &user.Name, &user.Email, &user.PhoneNumber, &user.Password, &user.Role)
+		Scan(&user.UserID, &user.Name, &user.Email, &user.PhoneNumber, &user.Role, &user.Password)
 
 	if err != nil {
 		return nil, err

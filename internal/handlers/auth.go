@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -15,10 +14,44 @@ import (
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	// Your login logic here
 	// ...
+	userService := services.NewUserService()
 
 	// After successful login, redirect to another page
 	if r.Method == http.MethodPost {
-		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+
+		err := r.ParseForm()
+		if err != nil {
+			http.Error(w, "Error parsing form data", http.StatusInternalServerError)
+			return
+		}
+
+		email := r.FormValue("username")
+		password := r.FormValue("password")
+
+		login := &models.LoginInput{
+			Email:    email,
+			Password: password,
+		}
+
+		auth, err := userService.LoginUser(login)
+		if err != nil {
+			log.Println(err)
+		}
+
+		if auth != nil {
+			// Set the token as a cookie
+			http.SetCookie(w, &http.Cookie{
+				Name:     "auth_token",
+				Value:    auth.AuthToken.AccessToken,
+				HttpOnly: true,
+			})
+
+			http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
+			return
+		} else {
+			FailHandler(w, "Login Failed")
+		}
+
 	} else if r.Method == http.MethodGet {
 		HomeHandler(w, r)
 	}
@@ -27,7 +60,6 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func SignupHandler(w http.ResponseWriter, r *http.Request) {
 	userService := services.NewUserService()
-	fmt.Println(r.Method)
 	if r.Method == http.MethodPost {
 		err := r.ParseForm()
 		if err != nil {
@@ -43,7 +75,6 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 		roleNumber, err := strconv.Atoi(role)
 		if err != nil {
-			fmt.Println("Error:", err)
 			return
 		}
 
@@ -57,13 +88,13 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 
 		success, err := userService.CreateUser(newUser)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 
 		if success {
 			SuccessHandler(w, "Signup Successful")
 		} else {
-			fmt.Println("User creation failed")
+			FailHandler(w, "Signup Failed")
 		}
 
 	} else if r.Method == http.MethodGet {

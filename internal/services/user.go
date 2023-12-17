@@ -35,3 +35,25 @@ func (s *UserService) CreateUser(newUser *models.NewUser) (bool, error) {
 	}
 	return true, nil
 }
+
+func (s *UserService) LoginUser(loginInput *models.LoginInput) (*models.AuthResponse, error) {
+	user, err := s.UserRepo.FindByEmail(loginInput.Email)
+	if err != nil {
+		return nil, errors.New("email or password is wrongss")
+	}
+
+	err = user.ComparePassword(loginInput.Password)
+	if err != nil {
+		return nil, errors.New("email or password is wrong")
+	}
+
+	token, err := user.GenToken()
+
+	if err != nil {
+		return nil, errors.New("something went wrong")
+	}
+
+	return &models.AuthResponse{
+		AuthToken: token,
+	}, nil
+}

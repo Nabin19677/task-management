@@ -16,3 +16,13 @@ func SuccessHandler(w http.ResponseWriter, message string) {
 	}
 	utils.RenderTemplate(w, "success.html", pageVariables)
 }
+
+func FailHandler(w http.ResponseWriter, message string) {
+	pageVariables := types.PageVariables{
+		Title: "Failed",
+		Data: map[string]interface{}{
+			"Message": message,
+		},
+	}
+	utils.RenderTemplate(w, "fail.html", pageVariables)
+}
