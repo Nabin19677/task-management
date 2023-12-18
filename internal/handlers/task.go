@@ -12,11 +12,6 @@ import (
 	"anilkhadka.com.np/task-management/utils"
 )
 
-// Implement HTTP handlers for task management
-func GetTaskHandler(w http.ResponseWriter, r *http.Request) {
-
-}
-
 func CreateTaskHandler(w http.ResponseWriter, r *http.Request) {
 	userID, ok := r.Context().Value("user_id").(string)
 	if !ok {
@@ -141,8 +136,6 @@ func EditTaskHandler(w http.ResponseWriter, r *http.Request) {
 			Description: description,
 			DueDate:     dueDate,
 			Status:      types.TaskStatus(status),
-
-			// Set other fields accordingly
 		}
 
 		err = taskService.UpdateTask(updatedTask)
@@ -151,10 +144,8 @@ func EditTaskHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
-		// Redirect the user to the dashboard or task list page after successful update
 		http.Redirect(w, r, "/dashboard", http.StatusSeeOther)
 	} else if r.Method == http.MethodGet {
-		// Fetch the task details from the database based on the task ID
 		task, err := taskService.GetByID(taskID)
 
 		if err != nil {
@@ -180,7 +171,6 @@ func EditTaskHandler(w http.ResponseWriter, r *http.Request) {
 
 		task.DueDate = formattedDueDate
 
-		// Render the edit task page with the task details and additional data
 		pageVariables := types.PageVariables{
 			Title: "Edit Task",
 			Data: map[string]interface{}{

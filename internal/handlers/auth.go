@@ -12,13 +12,9 @@ import (
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	// Your login logic here
-	// ...
 	userService := services.NewUserService()
 
-	// After successful login, redirect to another page
 	if r.Method == http.MethodPost {
-
 		err := r.ParseForm()
 		if err != nil {
 			http.Error(w, "Error parsing form data", http.StatusInternalServerError)
