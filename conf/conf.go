@@ -7,12 +7,14 @@ import (
 )
 
 type envConfigs struct {
-	DatabaseSource string `mapstructure:"DATABASE_SOURCE"`
-	ServerPort     string `mapstructure:"SERVER_PORT"`
-	JwtSecret      string `mapstructure:"JWT_SECRET"`
-	JwtIssuer      string `mapstructure:"JWT_ISSUER"`
-	Email          string `mapstructure:"EMAIL"`
-	EmailPassword  string `mapstructure:"EMAIL_PASSWORD"`
+	DatabaseSource      string `mapstructure:"DATABASE_SOURCE"`
+	ServerPort          string `mapstructure:"SERVER_PORT"`
+	JwtSecret           string `mapstructure:"JWT_SECRET"`
+	JwtIssuer           string `mapstructure:"JWT_ISSUER"`
+	EmailSender         string `mapstructure:"EMAIL_SENDER"`
+	EmailPassword       string `mapstructure:"EMAIL_PASSWORD"`
+	EmailServer         string `mapstructure:"EMAIL_SERVER"`
+	EmailServerSMTPPort string `mapstructure:"EMAIL_SERVER_SMTP_PORT"`
 }
 
 var EnvConfigs *envConfigs

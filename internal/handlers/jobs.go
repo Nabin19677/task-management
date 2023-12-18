@@ -25,8 +25,6 @@ func SendDailyMail() {
 }
 
 func sendReminderEmail(assignee models.AssigneeWithTask) {
-	// Implement your email sending logic here
-	// Use a library like gomail or net/smtp
 	fmt.Printf("Sending email to assignee %d with tasks %+v\n", assignee.AssigneeID, assignee.TaskDueDate)
 
 	emailService := services.NewEmailService()
