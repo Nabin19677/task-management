@@ -1,12 +1,35 @@
 package models
 
-import "time"
+import (
+	"anilkhadka.com.np/task-management/internal/types"
+)
 
 type Task struct {
 	ID          int
 	Title       string
 	Description string
-	DueDate     time.Time
-	Status      string
-	Assignee    string
+	DueDate     string
+	Status      types.TaskStatus
+	AssigneeID  int
+	ManagerID   int
+}
+
+type NewTask struct {
+	Title       string           `json:"title" db:"title"`
+	Description string           `json:"description" db:"description"`
+	DueDate     string           `json:"dueData" db:"due_data"`
+	Status      types.TaskStatus `json:"status" db:"status"`
+	AssigneeID  int              `json:"assigneeId" db:"assignee_id"`
+	ManagerID   int              `json:"managerId" db:"manager_id"`
+}
+
+type AssigneeWithTask struct {
+	AssigneeID      int
+	AssigneeName    string
+	AssigneeEmail   string
+	TaskID          int
+	TaskTitle       string
+	TaskDescription string
+	TaskDueDate     string
+	TaskStatus      string
 }

@@ -2,30 +2,41 @@ package main
 
 import (
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 
 	"anilkhadka.com.np/task-management/conf"
 	"anilkhadka.com.np/task-management/database/postgres"
 	"anilkhadka.com.np/task-management/internal/handlers"
+	"anilkhadka.com.np/task-management/internal/middlewares"
 	"anilkhadka.com.np/task-management/internal/repositories"
-	"anilkhadka.com.np/task-management/utils"
 
 	_ "github.com/lib/pq"
+	"github.com/robfig/cron/v3"
 )
 
-// HTMLTemplates contains the parsed HTML templates
-var HTMLTemplates *template.Template
-
-// Initialize HTML templates
-func initTemplates() {
-	// Implementation
+func initRoutes() {
+	http.HandleFunc("/", handlers.HomeHandler)
+	http.HandleFunc("/login", handlers.LoginHandler)
+	http.HandleFunc("/logout", handlers.LogoutHandler)
+	http.HandleFunc("/signup", handlers.SignupHandler)
+	http.Handle("/create-task", middlewares.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler)))
+	http.Handle("/delete-task/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler)))
+	http.Handle("/edit-task/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.EditTaskHandler)))
+	http.Handle("/update-status/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.UpdateTaskStatusHandler)))
+	http.Handle("/dashboard", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DashboardHandler)))
 }
 
-// StartCronJob starts a cron job for sending daily email reminders
-func StartCronJob() {
-	// Implementation
+func StartCronJobs() {
+	c := cron.New()
+
+	_, err := c.AddFunc("0 9 * * *", handlers.SendDailyMail)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	c.Start()
 }
 
 func main() {
@@ -37,21 +48,23 @@ func main() {
 
 	repositories.InitRepositories(db)
 
-	// Initialize HTML templates
-	initTemplates()
-
-	// Define HTTP routes handlers
-	utils.RegisterRoute("users", handlers.GetUserHandler)
-	utils.RegisterRoute("tasks", handlers.GetTaskHandler)
+	initRoutes()
 
 	// Serve static files (CSS, JS, etc.)
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("internal/static"))))
 
 	// Start the cron job
-	StartCronJob()
+	StartCronJobs()
 
 	// Start the server
-	port := ":8080"
+	defaultPort := ":8080"
+
+	port := defaultPort
+
+	if conf.EnvConfigs.ServerPort != "" {
+		port = ":" + conf.EnvConfigs.ServerPort
+	}
+
 	fmt.Printf("Server listening on port %s...\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }

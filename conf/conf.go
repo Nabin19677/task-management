@@ -11,6 +11,8 @@ type envConfigs struct {
 	ServerPort     string `mapstructure:"SERVER_PORT"`
 	JwtSecret      string `mapstructure:"JWT_SECRET"`
 	JwtIssuer      string `mapstructure:"JWT_ISSUER"`
+	Email          string `mapstructure:"EMAIL"`
+	EmailPassword  string `mapstructure:"EMAIL_PASSWORD"`
 }
 
 var EnvConfigs *envConfigs
