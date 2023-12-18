@@ -16,18 +16,9 @@ This is a Task Management web application powered by Go.
    cd task-management
    ```
 
-3. Create conf.toml file in conf folder.
+3. Create conf.toml file in conf folder. Reference conf.example.toml
 
-   ```bash
-    DATABASE_SOURCE = "postgres://postgres:2020@localhost:5432/taskmanager?sslmode=disable"
-    SERVER_PORT = "8080"
-    JWT_SECRET = "thisisasecret"
-    JWT_ISSUER = "leapfrog"
-    EMAIL = "###@yahoo.com"
-    EMAIL_PASSWORD = "#####"
-   ```
-
-   > **Note:** Get Email and Password from Yahoo Mail
+   > **Note:** Get Email and Password from Gmail Mail. Use App Password Generator.
 
 4. Build and install the CLI:
 
