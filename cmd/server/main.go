@@ -57,7 +57,14 @@ func main() {
 	StartCronJobs()
 
 	// Start the server
-	port := ":8080"
+	defaultPort := ":8080"
+
+	port := defaultPort
+
+	if conf.EnvConfigs.ServerPort != "" {
+		port = ":" + conf.EnvConfigs.ServerPort
+	}
+
 	fmt.Printf("Server listening on port %s...\n", port)
 	log.Fatal(http.ListenAndServe(port, nil))
 }
