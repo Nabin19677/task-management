@@ -1,4 +1,3 @@
-// repository/repository.go
 package repositories
 
 import (
@@ -9,12 +8,10 @@ import (
 	"anilkhadka.com.np/task-management/internal/types"
 )
 
-// UserRepository handles user-related operations.
 type UserRepository struct {
 	db *sql.DB
 }
 
-// NewUserRepository creates a new UserRepository with a database connection.
 func NewUserRepository(db *sql.DB) *UserRepository {
 	return &UserRepository{db: db}
 }
@@ -23,7 +20,6 @@ func (ur *UserRepository) GetTableName() string {
 	return "users"
 }
 
-// GetUser retrieves a user from the database by ID.
 func (ur *UserRepository) GetUserByID(userID int) (*models.User, error) {
 	query := "SELECT user_id, name, role FROM users WHERE user_id = $1 "
 	row := ur.db.QueryRow(query, userID)
@@ -67,7 +63,6 @@ func (ur *UserRepository) FindByEmail(email string) (*models.User, error) {
 func (ur *UserRepository) Insert(newUser models.NewUser) (bool, error) {
 	newUser.HashPassword(newUser.Password)
 
-	// Use SQL query with placeholders to prevent SQL injection
 	query := "INSERT INTO " + ur.GetTableName() + " (name, email, phone_number, password, role) VALUES ($1, $2, $3, $4, $5)"
 	_, err := ur.db.Exec(query, newUser.Name, newUser.Email, newUser.PhoneNumber, newUser.Password, newUser.Role)
 
