@@ -28,6 +28,7 @@
         </tr>
       </thead>
       <tbody>
+        {{if .Data.Tasks}}
         {{range .Data.Tasks}}
         <tr>
           <td>{{.ID}}</td>
@@ -49,6 +50,11 @@
             <a href="/edit-task/{{.ID}}" class="action-link">Edit</a>
             <a href="/delete-task/{{.ID}}" class="action-link">Delete</a>
           </td>
+        </tr>
+        {{end}}
+        {{else}}
+        <tr>
+          <td colspan="5">No tasks found.</td>
         </tr>
         {{end}}
       </tbody>

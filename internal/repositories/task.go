@@ -98,7 +98,7 @@ func (tr *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, erro
 func (ur *TaskRepository) GetTasksByAssignee(assigneeId int) ([]*models.Task, error) {
 	var tasks []*models.Task
 
-	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE assignee_id = $1 ORDER BY id;"
+	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE assignee_id = $1 AND status != 'DONE' ORDER BY id;"
 	rows, err := ur.db.Query(query, assigneeId)
 
 	if err != nil {

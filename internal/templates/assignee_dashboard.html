@@ -23,7 +23,9 @@
           <th>Status</th>
         </tr>
       </thead>
+
       <tbody>
+        {{if .Data.Tasks}}
         {{range .Data.Tasks}}
         <tr>
           <td>{{.ID}}</td>
@@ -38,6 +40,11 @@
               </select>
             </form>
           </td>
+        </tr>
+        {{end}}
+        {{else}}
+        <tr>
+          <td colspan="4">No assigned tasks found.</td>
         </tr>
         {{end}}
       </tbody>
