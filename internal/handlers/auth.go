@@ -105,3 +105,16 @@ func SignupHandler(w http.ResponseWriter, r *http.Request) {
 		utils.RenderTemplate(w, "signup.html", pageVariables)
 	}
 }
+
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	cookie := &http.Cookie{
+		Name:   "auth_token",
+		Value:  "",
+		Path:   "/",
+		MaxAge: -1,
+	}
+
+	http.SetCookie(w, cookie)
+
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+}

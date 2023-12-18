@@ -2,3 +2,6 @@ DATABASE_SOURCE = "postgres://postgres:2020@localhost:5432/taskmanager?sslmode=d
 SERVER_PORT = "8080"
 JWT_SECRET = "thisisasecret"
 JWT_ISSUER = "leapfrog"
+EMAIL = "###@yahoo.com"
+EMAIL_PASSWORD = "#####"
+

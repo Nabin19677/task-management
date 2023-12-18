@@ -7,31 +7,39 @@
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
   </head>
   <body>
-    <a href="/create-task" class="signup-button"> Create Task </a>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {{range .Data.Tasks}}
-        <tr>
-          <td>{{.ID}}</td>
-          <td>{{.Title}}</td>
-          <td>{{.Description}}</td>
-          <td>{{.Status}}</td>
-          <td>
-            <a href="/edit-task/{{.ID}}">Edit</a>
-            <a href="/delete-task/{{.ID}}">Delete</a>
-          </td>
-        </tr>
-        {{end}}
-      </tbody>
-    </table>
+    <div class="header">
+      <h1>{{.Title}}</h1>
+      <a href="/logout" class="logout-button">Logout</a>
+    </div>
+
+    <div style="margin-top: 40px; padding: 10px 20px">
+      <h2>Task List</h2>
+      <a href="/create-task" class="create-task-button">Create Task</a>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .Data.Tasks}}
+          <tr>
+            <td>{{.ID}}</td>
+            <td>{{.Title}}</td>
+            <td>{{.Description}}</td>
+            <td>{{.Status}}</td>
+            <td>
+              <a href="/edit-task/{{.ID}}" class="action-link">Edit</a>
+              <a href="/delete-task/{{.ID}}" class="action-link">Delete</a>
+            </td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
   </body>
 </html>

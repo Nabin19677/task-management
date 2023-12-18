@@ -5,7 +5,8 @@ body {
   padding: 0;
 }
 
-h1 {
+h1,
+h2 {
   color: #333;
   text-align: center;
 }
@@ -29,7 +30,9 @@ label {
   font-weight: bold;
 }
 
-input {
+input,
+textarea,
+select {
   width: 100%;
   padding: 8px;
   margin-bottom: 12px;
@@ -61,40 +64,69 @@ table {
 th,
 td {
   border: 1px solid #ddd;
-  padding: 8px;
+  padding: 12px;
   text-align: left;
 }
 
 th {
+  background-color: #4caf50;
+  color: white;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-#createTaskButton {
-  display: block;
-  margin-bottom: 20px;
+#createTaskButton,
+a.create-task-button,
+a.action-link {
+  display: inline-block;
   padding: 10px;
+  text-decoration: none;
+}
+
+#createTaskButton {
   background-color: #4caf50;
   color: white;
-  text-decoration: none;
   text-align: center;
 }
 
-input,
-select {
-  width: 100% !important;
-  padding: 8px !important;
-  box-sizing: border-box !important;
-  border: 1px solid #ccc !important;
-  border-radius: 4px !important;
+a.create-task-button {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  float: right;
+  margin-right: 10px;
 }
 
-.select-style {
-  position: relative !important;
+a.action-link,
+a.action-link:hover {
+  color: #333;
 }
 
-.select-style::after {
-  position: absolute !important;
-  top: 50% !important;
-  right: 10px !important;
-  transform: translateY(-50%) !important;
+a.action-link:hover {
+  color: #4caf50;
+  font-weight: bold;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+}
+
+.logout-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #e74c3c; /* Red color for logout */
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.logout-button:hover {
+  background-color: #c0392b; /* Darker red color on hover */
 }

@@ -10,16 +10,15 @@ import (
 	"anilkhadka.com.np/task-management/internal/handlers"
 	"anilkhadka.com.np/task-management/internal/middlewares"
 	"anilkhadka.com.np/task-management/internal/repositories"
-	"anilkhadka.com.np/task-management/utils"
 
 	_ "github.com/lib/pq"
 	"github.com/robfig/cron/v3"
 )
 
-// Initialize HTML templates
-func initTemplates() {
+func initRoutes() {
 	http.HandleFunc("/", handlers.HomeHandler)
 	http.HandleFunc("/login", handlers.LoginHandler)
+	http.HandleFunc("/logout", handlers.LogoutHandler)
 	http.HandleFunc("/signup", handlers.SignupHandler)
 	http.Handle("/create-task", middlewares.AuthMiddleware(http.HandlerFunc(handlers.CreateTaskHandler)))
 	http.Handle("/delete-task/", middlewares.AuthMiddleware(http.HandlerFunc(handlers.DeleteTaskHandler)))
@@ -49,12 +48,7 @@ func main() {
 
 	repositories.InitRepositories(db)
 
-	// Initialize HTML templates
-	initTemplates()
-
-	// Define HTTP API routes handlers
-	utils.RegisterRoute("users", handlers.GetUserHandler)
-	utils.RegisterRoute("tasks", handlers.GetTaskHandler)
+	initRoutes()
 
 	// Serve static files (CSS, JS, etc.)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("internal/static"))))

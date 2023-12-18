@@ -30,7 +30,7 @@ func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 		tasks, _ := taskService.GetTasksByManager(userID)
 
 		pageVariables := types.PageVariables{
-			Title: "Dashboard",
+			Title: "Manager Dashboard",
 			Data: map[string]interface{}{
 				"Tasks": tasks,
 			},
@@ -40,7 +40,7 @@ func DashboardHandler(w http.ResponseWriter, r *http.Request) {
 		tasks, _ := taskService.GetTasksByAssignee(userID)
 
 		pageVariables := types.PageVariables{
-			Title: "Dashboard",
+			Title: "Your Tasks",
 			Data: map[string]interface{}{
 				"Tasks": tasks,
 			},
