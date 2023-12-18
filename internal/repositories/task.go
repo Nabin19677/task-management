@@ -21,11 +21,11 @@ func (tr *TaskRepository) GetTableName() string {
 }
 
 func (tr *TaskRepository) GetTask(taskID int) (*models.Task, error) {
-	query := "SELECT id, title, description, status FROM " + tr.GetTableName() + " WHERE id = $1 ;"
+	query := "SELECT id, title, description, status, due_date FROM " + tr.GetTableName() + " WHERE id = $1 ;"
 	row := tr.db.QueryRow(query, taskID)
 
 	task := &models.Task{}
-	err := row.Scan(&task.ID, &task.Title, &task.Description, &task.Status)
+	err := row.Scan(&task.ID, &task.Title, &task.Description, &task.Status, &task.DueDate)
 	if err != nil {
 		return nil, err
 	}

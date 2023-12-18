@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"anilkhadka.com.np/task-management/internal/models"
 	"anilkhadka.com.np/task-management/internal/services"
@@ -167,6 +168,17 @@ func EditTaskHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "Failed to fetch assignees", http.StatusInternalServerError)
 			return
 		}
+
+		dueDate, err := time.Parse("2006-01-02T15:04:05Z07:00", task.DueDate)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, "Failed to parse DueDate", http.StatusInternalServerError)
+			return
+		}
+
+		formattedDueDate := dueDate.Format("2006-01-02T15:04")
+
+		task.DueDate = formattedDueDate
 
 		// Render the edit task page with the task details and additional data
 		pageVariables := types.PageVariables{
