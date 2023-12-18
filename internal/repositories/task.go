@@ -20,7 +20,7 @@ func (tr *TaskRepository) GetTableName() string {
 }
 
 func (tr *TaskRepository) GetTask(taskID int) (*models.Task, error) {
-	query := "SELECT id, title, description, status, due_date FROM " + tr.GetTableName() + " WHERE id = $1 ;"
+	query := "SELECT id, title, description, status, due_date FROM " + tr.GetTableName() + " WHERE id = $1 ORDER BY id;"
 	row := tr.db.QueryRow(query, taskID)
 
 	task := &models.Task{}
@@ -71,7 +71,7 @@ func (tr *TaskRepository) UpdateTaskStatus(taskID int, newStatus string) (bool, 
 func (tr *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, error) {
 	var tasks []*models.Task
 
-	query := "SELECT id, title, description, status FROM " + tr.GetTableName() + " WHERE manager_id = $1 ;"
+	query := "SELECT id, title, description, status FROM " + tr.GetTableName() + " WHERE manager_id = $1 ORDER BY id;"
 	rows, err := tr.db.Query(query, managerId)
 
 	if err != nil {
@@ -98,7 +98,7 @@ func (tr *TaskRepository) GetTasksByManager(managerId int) ([]*models.Task, erro
 func (ur *TaskRepository) GetTasksByAssignee(assigneeId int) ([]*models.Task, error) {
 	var tasks []*models.Task
 
-	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE assignee_id = $1 ;"
+	query := "SELECT id, title, description, status FROM " + ur.GetTableName() + " WHERE assignee_id = $1 ORDER BY id;"
 	rows, err := ur.db.Query(query, assigneeId)
 
 	if err != nil {
