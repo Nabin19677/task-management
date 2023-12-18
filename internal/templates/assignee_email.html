@@ -4,40 +4,60 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Email Template</title>
+    <title>Daily Task Reminder</title>
     <style>
       body {
-        font-family: "Arial", sans-serif;
+        font-family: Arial, sans-serif;
         background-color: #f4f4f4;
+        color: #333;
         margin: 0;
         padding: 0;
       }
+
       .container {
         max-width: 600px;
-        margin: 0 auto;
+        margin: 20px auto;
+        background-color: #fff;
         padding: 20px;
-        background-color: #ffffff;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         border-radius: 5px;
-        margin-top: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
       }
+
       h1 {
-        color: #333;
+        color: #007bff;
       }
+
       p {
-        color: #666;
+        margin-bottom: 15px;
+      }
+
+      .task-details {
+        border-top: 1px solid #ddd;
+        margin-top: 20px;
+        padding-top: 10px;
       }
     </style>
   </head>
+
   <body>
     <div class="container">
-      <h1>Your Email Subject</h1>
+      <h1>Daily Task Reminder</h1>
       <p>Hello {{.AssigneeName}},</p>
       <p>
-        This is a sample email template. You can customize it according to your
-        needs. If your are receiving this you may have pending tasks.
+        This is a friendly reminder about your daily task. Here are the details:
       </p>
-      <p>Regards,<br />Manager</p>
+
+      <div class="task-details">
+        <p><strong>Task:</strong> {{.TaskTitle}}</p>
+        <p><strong>Description:</strong> {{.TaskDescription}}</p>
+      </div>
+
+      <p>
+        Make sure to complete your task by the end of the day. If you have any
+        questions or concerns, feel free to reach out.
+      </p>
+
+      <p>Best regards,<br />Your Task Management System</p>
     </div>
   </body>
 </html>
